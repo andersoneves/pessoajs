@@ -27,7 +27,15 @@ trecho de codigo antigo desnecessario
 					contentType:false,//não validade tipo de dados
 					processData:false//não processar dados
 					}).done(function(response){//evento de finalização com sucesso 
-						console.log(response);
+						let msg=$.parseJSON(response);///ransforma o retorno em objeto JSON
+						console.log(msg);
+						$(".msg")[0].innerHTML=msg.texto;
+						$(".msg").attr("style","display: block; background-color:"+msg.color);
+						$(form).find("input").each(function () {//para cada item do form limpar os dados
+							if($(this).attr("type")!="submit"){//não apagar o valor do botao
+  								$($(this)[0]).val("");//esvaziar o campo
+							}    
+						});
 					});
 			});
 
@@ -38,12 +46,16 @@ trecho de codigo antigo desnecessario
 				
 				$(ultimo).hide();//esconde a div que esta a mostra
 				$(dv).show();//mostra a div referente ao botão clicado
+				if ($(dv).attr("class") == "listar") {
+					pessoa();
+				}
 				ultimo=dv;//atualiza a div visivel
 		});
 
-			$.ajax({//inicio do ajax que vai caregar os dados de nome e id de cada pessoa
+		function pessoa(){
+				$.ajax({//inicio do ajax que vai caregar os dados de nome e id de cada pessoa
 				url: "pessoa.php",//url que será envido os dados 
-				context: document.bodyão
+				context: document.body
 				}).done(function(json){//evento de finalização com sucesso
 					let pessoa=$.parseJSON(json);//transforma o retorno em objeto JSON
 					for (var i = 0; i < pessoa.length-1; i++) {//laço para percorrer cada pessoa no objeto json
@@ -56,6 +68,8 @@ trecho de codigo antigo desnecessario
 					}
 
 				});
+		}
+		 pessoa();
 				
 			function dataInclude(el){//função para inclusão dos demais dados de uma pesssoa
 				$(el).click(function(){//adiciona o evento de click no elemento
@@ -146,6 +160,8 @@ trecho de codigo antigo desnecessario
 		<div data-elemento="exclui" class="menu">Excluir</div>
 		<div data-elemento="listar"class="menu">Listar</div>
 	</div>
+
+	<div class="msg" style="display: block;"> </div>
 	
 	<div class="listar">	
 	</div>
@@ -164,7 +180,6 @@ trecho de codigo antigo desnecessario
 				<input type="file" name="img"><br>
 				<input id="salvar" type="submit" name="salvar" value="Salvar">
 			</form>
-	</div>
 	</div>
 
 	<div class="editar">
