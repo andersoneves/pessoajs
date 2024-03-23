@@ -14,6 +14,7 @@ trecho de codigo antigo desnecessario
 	<script type="text/javascript"> // inclusao de scripty js 
 		var ultimo=".listar"; // variavel para guardar o ultimo elemento que foi apresentado na tela. 
 		$(document).ready(function(){ //evento documento carregado 
+			
 			$("#salvar").click(function(e){//evento de click no botão salvar
 				e.preventDefault();//prevenindo o evento padrão do botao 
 				form=$(this).parent()[0];//seleciona o elemento pai do botão clicado no caso o form. [0] transforma o obj jquery para elemento HTML
@@ -30,7 +31,9 @@ trecho de codigo antigo desnecessario
 						let msg=$.parseJSON(response);///ransforma o retorno em objeto JSON
 						console.log(msg);
 						$(".msg")[0].innerHTML=msg.texto;
-						$(".msg").attr("style","display: block; background-color:"+msg.color);
+						$(".msg").attr("style","background-color:"+msg.color);
+						$(".msg").show();
+						$(".msg").show(200);
 						$(form).find("input").each(function () {//para cada item do form limpar os dados
 							if($(this).attr("type")!="submit"){//não apagar o valor do botao
   								$($(this)[0]).val("");//esvaziar o campo
@@ -49,17 +52,28 @@ trecho de codigo antigo desnecessario
 				if ($(dv).attr("class") == "listar") {
 					pessoa();
 				}
+				if ($(dv).attr("class") == "excluir") {
+					pessoa();
+					$(dv).hide();
+					$(".listar").show();
+					console.log($(".btn-delete"));
+					dv="listar";
+					$(".btn-delete").show();
+					console.log("ola");
+				}
 				ultimo=dv;//atualiza a div visivel
 		});
 
 		function pessoa(){
+				$(".listar")[0].innerHTML="";
 				$.ajax({//inicio do ajax que vai caregar os dados de nome e id de cada pessoa
 				url: "pessoa.php",//url que será envido os dados 
 				context: document.body
+
 				}).done(function(json){//evento de finalização com sucesso
 					let pessoa=$.parseJSON(json);//transforma o retorno em objeto JSON
 					for (var i = 0; i < pessoa.length-1; i++) {//laço para percorrer cada pessoa no objeto json
-					html='<div class="info"><div class="nome" data-id="" >Nome: </div></div>';//html base para a criação de cada pessoa
+					html='<div class="info"><div class="nome" data-id="" >Nome: </div> <div class="btn-delete">Delete</div> <div class="btn-editar">Editar</div> </div>';//html base para a criação de cada pessoa
 					html=$(html);//converção do html para objeto jquery
 					html.find(".nome")[0].innerHTML+=pessoa[i].nome;//concatena no elemento com class nome o nome retornado no objeto json
 					$(html.find(".nome")[0]).attr("data-id",pessoa[i].id);//define o id da pessoa que esta no objeto json para o atributo data-id do elemento que acaba de ser criado
@@ -116,13 +130,24 @@ trecho de codigo antigo desnecessario
 			width: 200px;
 			height: 80px;
 		}
-
+		.btn-delete,.btn-editar{
+		 	display:inline-block;
+		 	cursor: pointer;
+		 	background-color: #c15e56;
+		 	margin-left: 20%;
+		 	padding: 3px;
+		 	display: none;
+		}
+		.btn-delete:hover,.btn-editar:hover{
+			background-color:#d1a4a1;
+		}
 		.dados{
 			/*display: none;*/
 		}
 		.nome{/*apresentação dos elementos com a classe nome*/
 			text-decoration: none; /*remove o css anterior do texto*/
 			cursor: pointer;/*define o curso como ponteiro para dar a ideia de objeto com evento de click*/
+			display: block;
 		}
 		.cadastrar,.editar,.exclui{/*define o css inicial das classes cadastrar editar e exluir para inicio escondido*/
 			display: none;/*esconde o elemento*/
@@ -157,13 +182,15 @@ trecho de codigo antigo desnecessario
 	<div class="menubar"><!-- menu de seleção de div a ser exibida funcionalidade dada por js -->
 		<div data-elemento="cadastrar" class="menu">Cadastrar</div>
 		<div data-elemento="editar" class="menu">Editar</div>
-		<div data-elemento="exclui" class="menu">Excluir</div>
+		<div data-elemento="excluir" class="menu">Excluir</div>
 		<div data-elemento="listar"class="menu">Listar</div>
 	</div>
 
-	<div class="msg" style="display: block;"> </div>
+	<div class="msg" style="display: none;"> </div>
 	
 	<div class="listar">	
+	</div>
+	<div class="excluir">	
 	</div>
 
 	<div class="cadastrar">
@@ -185,8 +212,7 @@ trecho de codigo antigo desnecessario
 	<div class="editar">
 	</div>
 
-	<div class="exclui">
-	</div>
+	
 <!-- codigo antigo que foi usado quando era recarregado os dados via php sem js
 	<?php
 		while ($pessoa=mysqli_fetch_assoc($dados)) {
