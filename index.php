@@ -53,18 +53,15 @@ trecho de codigo antigo desnecessario
 					pessoa();
 				}
 				if ($(dv).attr("class") == "excluir") {
-					pessoa();
+					pessoa("excluir");
 					$(dv).hide();
 					$(".listar").show();
-					console.log($(".btn-delete"));
-					dv="listar";
-					$(".btn-delete").show();
-					console.log("ola");
+					dv=".listar";
+					
 				}
 				ultimo=dv;//atualiza a div visivel
 		});
-
-		function pessoa(){
+		function pessoa(pg="listar"){
 				$(".listar")[0].innerHTML="";
 				$.ajax({//inicio do ajax que vai caregar os dados de nome e id de cada pessoa
 				url: "pessoa.php",//url que será envido os dados 
@@ -79,8 +76,10 @@ trecho de codigo antigo desnecessario
 					$(html.find(".nome")[0]).attr("data-id",pessoa[i].id);//define o id da pessoa que esta no objeto json para o atributo data-id do elemento que acaba de ser criado
 					dataInclude(html.find(".nome")[0]);//chama a função que adiciona o evento de click no elemento criado . este evento serve para carregar os demais dados do usuario
 					$(".listar").append(html);//seleciona a div listar onde as pessoas são incluidas e adiciona ao final o elemento criado
-					}
 
+					}
+					if(pg=="excluir")
+						$(".btn-delete").show();
 				});
 		}
 		 pessoa();
