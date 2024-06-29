@@ -1,4 +1,6 @@
 <?php
+error_reporting(E_ALL);
+ini_set('display_errors', '1');
 	function pessoa()
 	{
 		if(isset($_GET["id"])){//se a requisisao conter um elemento id no $_GET a pagina deve devolver somente os demais dados da pessoa

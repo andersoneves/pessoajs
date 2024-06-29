@@ -42,6 +42,7 @@ trecho de codigo antigo desnecessario
 					});
 			});
 
+
 			$(".menu").click(function(){//evento de clique em um dos elementos com a classe menu
 				el=$(this);//transforma o elemento clicado de html para obj jquery
 				dv=el.attr("data-elemento");//seleciona do valor do atributo data-elemento do elemento clicado
@@ -52,11 +53,11 @@ trecho de codigo antigo desnecessario
 				if ($(dv).attr("class") == "listar") {
 					pessoa();
 				}
-				if ($(dv).attr("class") == "excluir") {
-					pessoa("excluir");
-					$(dv).hide();
-					$(".listar").show();
-					dv=".listar";
+				if ($(dv).attr("class") == "excluir") {//mostrar o excluir
+					pessoa("excluir");//chama  pessoa com parametro de exclusão
+					$(dv).hide();//esconde  a dv
+					$(".listar").show();//mostra o listar
+					dv=".listar";//define o listar como ultima div apresentada
 					
 				}
 				ultimo=dv;//atualiza a div visivel
@@ -78,12 +79,15 @@ trecho de codigo antigo desnecessario
 					$(".listar").append(html);//seleciona a div listar onde as pessoas são incluidas e adiciona ao final o elemento criado
 
 					}
-					if(pg=="excluir")
-						$(".btn-delete").show();
+					if(pg=="excluir")//se for a div de exclusao 
+						$(".btn-delete").show();///mostea o botao de exclusao
+					$(".btn-delete").click(function(){
+						console.log($(this).parent().find(".nome").attr("data-id")) ;
+					});
 				});
 		}
 		 pessoa();
-				
+			
 			function dataInclude(el){//função para inclusão dos demais dados de uma pesssoa
 				$(el).click(function(){//adiciona o evento de click no elemento
 				var el=$(this);//transforma o elemento em obj jquery
