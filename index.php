@@ -62,6 +62,9 @@ trecho de codigo antigo desnecessario
 				}
 				ultimo=dv;//atualiza a div visivel
 		});
+
+
+
 		function pessoa(pg="listar"){
 				$(".listar")[0].innerHTML="";
 				$.ajax({//inicio do ajax que vai caregar os dados de nome e id de cada pessoa

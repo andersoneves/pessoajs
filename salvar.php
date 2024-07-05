@@ -14,7 +14,7 @@ $data=mysqli_query($com,"INSERT INTO `pessoas` (`id`, `nome`, `idade`, `login`, 
 if($data){//define a mensagen a ser devolvida para o ajax
 	$msg='{"texto":"Dados salvos com sucesso!","color":"#55b555"}';//mensagem de sucesso com cor verde
 }else{
-	$msg='{"texto":"Erro ao salvar!","color":"##f44336"}';//mensagen de erro com cor vermelha
+	$msg='{"texto":"Erro ao salvar!","color":"#f44336"}';//mensagen de erro com cor vermelha
 }
 echo $msg;//imprime a mensagem 
 ?>
