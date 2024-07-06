@@ -85,7 +85,26 @@ trecho de codigo antigo desnecessario
 					if(pg=="excluir")//se for a div de exclusao 
 						$(".btn-delete").show();///mostea o botao de exclusao
 					$(".btn-delete").click(function(){
-						console.log($(this).parent().find(".nome").attr("data-id")) ;
+						id=$(this).parent().find(".nome").attr("data-id") ;
+						elemento=$(this).parent();
+					$.ajax({ 
+						url: "excluir.php?id="+id,
+						context: document.body //contexto da requisiç
+						}).done(function(json){
+							let msg=$.parseJSON(json);
+							if(msg.resposta){
+								elemento.hide();
+							}
+							$(".msg")[0].innerHTML=msg.texto;
+							$(".msg").attr("style","background-color:"+msg.color);
+							//$(".msg").show();
+							$(".msg").show();
+							setTimeout(() => {
+  								$(".msg").hide();
+							},800);
+
+							
+						})
 					});
 				});
 		}
