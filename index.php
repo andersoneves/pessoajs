@@ -43,6 +43,7 @@ trecho de codigo antigo desnecessario
 			});
 
 
+
 			$(".menu").click(function(){//evento de clique em um dos elementos com a classe menu
 				el=$(this);//transforma o elemento clicado de html para obj jquery
 				dv=el.attr("data-elemento");//seleciona do valor do atributo data-elemento do elemento clicado
@@ -60,8 +61,16 @@ trecho de codigo antigo desnecessario
 					dv=".listar";//define o listar como ultima div apresentada
 					
 				}
+				if ($(dv).attr("class") == "editar") {//mostrar o excluir
+					pessoa("editar");//chama  pessoa com parametro de exclusão
+					$(dv).hide();//esconde  a dv
+					$(".listar").show();//mostra o listar
+					dv=".listar";//define o listar como ultima div apresentada
+					
+				}
 				ultimo=dv;//atualiza a div visivel
 		});
+
 
 
 
@@ -84,6 +93,28 @@ trecho de codigo antigo desnecessario
 					}
 					if(pg=="excluir")//se for a div de exclusao 
 						$(".btn-delete").show();///mostea o botao de exclusao
+					if(pg=="editar")//se for a div de exclusao 
+						$(".btn-editar").show();///mostea o botao de exclusao
+					
+					$(".btn-editar").click(function(){
+							id=$(this).parent().find(".nome").attr("data-id");
+							$.ajax({//inicio do ajax que vai caregar os demais dados de pessoa que recebeu o click
+						  	url: "pessoa.php?id="+id,//monta a url concatenando o id da pessoa a url da pagina que retorna os dados. a concatenação só e valida para requisições do tipo GET
+						  	context: document.body //contexto da requisiç
+							}).done(function(json){//evento de finalização com sucesso
+							let pessoa=$.parseJSON(json);//transforma o retorno em objeto JSON
+						  	console.log(pessoa);//console os
+						  	form=$(".editar").find("form");
+						  	form.find(".name")[0].value=pessoa.nome;
+						  	form.find(".idade")[0].value=pessoa.idade;
+						  	form.find(".login")[0].value=pessoa.login;
+						  	form.find(".senha")[0].value=pessoa.senha;
+						  	form.find(".id")[0].value=pessoa.id;
+						  	console.log(form.find(".name"))
+						  	$(".editar").show();
+						  });
+					});
+
 					$(".btn-delete").click(function(){
 						id=$(this).parent().find(".nome").attr("data-id") ;
 						elemento=$(this).parent();
@@ -235,6 +266,20 @@ trecho de codigo antigo desnecessario
 	</div>
 
 	<div class="editar">
+		<form action="editar.php" method="POST"><!-- formulario de cadastro ações executadas via js -->
+				<input class="id" type="hidden" name="id">
+				<div>Nome:</div>
+				<input type="text" class="name" name="nome" placeholder="Nome">
+				<div>Idade:</div>
+				<input type="text" class="idade" name="idade" placeholder="Idade">
+				<div>Login:</div>
+				<input type="text" class="login" name="login" placeholder="Login">
+				<div>Senha</div>
+				<input type="text" class="senha" name="senha" placeholder="Senha">
+				<div>Imagem:</div>
+				<input type="file" class="img" name="img"><br>
+				<input id="salvar" type="submit" name="salvar" value="Salvar">
+			</form>
 	</div>
 
 	
