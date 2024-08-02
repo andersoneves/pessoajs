@@ -42,7 +42,42 @@ trecho de codigo antigo desnecessario
 					});
 			});
 
+			$("#editar").click(function(e){//evento de click no botão salvar
+				e.preventDefault();//prevenindo o evento padrão do botao 
+				form=$(this).parent()[0];//seleciona o elemento pai do botão clicado no caso o form. [0] transforma o obj jquery para elemento HTML
+				var link=$(this).parent().attr("action");//seleciona a url de submissão do form
+				var metodo=$(this).parent().attr("method");//seleciona o metodo de envio do form
+				var formData=new FormData(form);//carrega as informações do form
+				$.ajax({//inicio do ajax que vai enviar os dados para o servidor sem recarregar pagina
+					url:link,//atributo do ajax para onde vai enviar os dados
+					type:metodo,//atributo do metodo de trafego de dados
+					data:formData,//dados que serão enviados
+					contentType:false,//não validade tipo de dados
+					processData:false//não processar dados
+					}).done(function(response){//evento de finalização com sucesso 
+						let msg=$.parseJSON(response);///ransforma o retorno em objeto JSON
+						console.log(msg);
+						$(".msg")[0].innerHTML=msg.texto;
+						$(".msg").attr("style","background-color:"+msg.color);
+						$(".msg").show();
+						$(".msg").show(200);
+						$(form).find("input").each(function () {//para cada item do form limpar os dados
+							if($(this).attr("type")!="submit"){//não apagar o valor do botao
+  								$($(this)[0]).val("");//esvaziar o campo
+							}    
+						});
+						if(msg.codigo){
+							$(".info").each(function(el){
+								let id=$(this).find(".nome").attr("data-id");
 
+								if(formData.get("id")==id){
+									$(this).find(".nome")[0].innerHTML=formData.get("nome")
+								}
+						});
+
+						}
+					});
+			});
 
 			$(".menu").click(function(){//evento de clique em um dos elementos com a classe menu
 				el=$(this);//transforma o elemento clicado de html para obj jquery
@@ -278,7 +313,7 @@ trecho de codigo antigo desnecessario
 				<input type="text" class="senha" name="senha" placeholder="Senha">
 				<div>Imagem:</div>
 				<input type="file" class="img" name="img"><br>
-				<input id="salvar" type="submit" name="salvar" value="Salvar">
+				<input id="editar" type="submit" name="salvar" value="Salvar">
 			</form>
 	</div>
 
